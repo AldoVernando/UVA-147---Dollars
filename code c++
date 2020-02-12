@@ -1,0 +1,47 @@
+#include<stdio.h>
+#include<string.h>
+
+int money[15] = {10000,5000,2000,1000,500,200,100, 50, 20, 10, 5};
+long long memo[400000][100];
+
+long long coinChange(int change,int index){
+
+	if(change < 0){
+		return 0;
+	}
+	if(change == 0){
+		return 1;
+	}
+	if(memo[change][index] != -1){
+		return memo[change][index];
+	}
+
+	long long totalChange = 0;
+	
+	for(int i=index;i<11;i++){
+		int c = money[i];
+		long long res = coinChange(change-c,i);
+		totalChange += res;
+	}
+	
+	memo[change][index] = totalChange;
+	
+	return totalChange;
+}
+
+int main(){
+	
+	float input = 0;
+	
+	memset(memo,-1,sizeof(memo));
+	
+	while(scanf("%f",&input) != EOF){
+		
+		if(input == 0) break;	
+		
+		float mon = input * 100.001;
+		printf("%6.2f%17lld\n",input,coinChange(mon,0));
+	}
+	
+	return 0;
+}
